@@ -32,38 +32,43 @@ print (T)
 
 #2.3.1
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-
-import seaborn as sns
+import numpy as np
+from sklearn.metrics import accuracy_score
 
 iris = sns.load_dataset('iris')
 
-X_train,X_test,y_train,y_test = train_test_split(
-    iris.iloc[:,:-1],
-    iris.iloc[:,-1],
-    test_size= 0.15
+x_tr, x_t, y_tr, y_t = train_test_split(
+    iris.iloc[:, :-1],
+    iris.iloc[:, -1],
+    test_size=0.15
 )
-X_train.shape,X_test.shape,y_train.shape,y_test.shape
-X_train.head()
-y_train.head()
 
-model=KNeighborsClassifier(n_neighbors=15)
-model.fit(X_train,y_train)
+k = 1  # 5 and 10
+model = KNeighborsClassifier(n_neighbors=k)
+model.fit(x_tr, y_tr)
 
-y_pred=model.predict(X_test)
-y_pred
+y_pr = model.predict(x_t)
 
-plt.figure(figsize=(16,7))
-sns.scatterplot(x='petal_width',y='petal_length',data=iris,hue='species',s=70)
-plt.xlabel('Длина лепестка,см')
-plt.ylabel('Ширина лепестка,см')
+plt.figure(figsize=(10, 7))
+sns.scatterplot(
+    data=iris,
+    x='petal_width', y='petal_length',
+    hue='species',
+    s=70
+)
+plt.xlabel('Длина лепестка, см')
+plt.ylabel('Ширина лепестка, см')
 plt.legend(loc=2)
 plt.grid()
 
-for i in range(len(y_test)):
-    if np.array(y_test)[i] !=y_pred[i]:
-        plt.scatter(X_test.iloc[i,3],X_test.iloc[i,2],color='red',s=150)
+for i in range(len(y_t)):
+    if np.array(y_t)[i] != y_pr[i]:
+        plt.scatter(x_t.iloc[i, 3], x_t.iloc[i, 2], color='red', s=150)
 
-from sklearn.metrics import accuracy_score
-print('accuracy:{accuracy_score(y_test,y_pred):.3}')
+print(f'accuracy: {accuracy_score(y_t, y_pr):.3}')
+
+plt.show()
+
