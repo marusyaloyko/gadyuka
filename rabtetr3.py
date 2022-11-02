@@ -72,3 +72,21 @@ print(f'accuracy: {accuracy_score(y_t, y_pr):.3}')
 
 plt.show()
 
+# 3.3.2
+import pandas as pd
+from sklearn.feature_extraction import DictVectorizer
+
+da = pd.DataFrame({"тип темперамента": ["холерик", "сангвиник", "меланхолик", "флегматик",]})
+
+scale_mapper = {"холерик": 1, "сангвиник": 2, "меланхолик": 3, "флегматик": 4}
+
+da["тип темперамента"].replace(scale_mapper)
+print(da, "\n")
+
+dic = [{"холерик": 2, "сангвиник": 7}, {"меланхолик": 1, "флегматик": 9}]
+
+d = DictVectorizer(sparse=False)
+
+features = d.fit_transform(dic)
+
+print(features)
